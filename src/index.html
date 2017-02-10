@@ -42,17 +42,20 @@
 				{nome: "GVT", codigo: 20, categoria: "Fixo"},
 				{nome: "Embratel", codigo: 43, categoria: "Fixo"}
 			];
-
-			$scope.adicionarContato = function adicionarContato(contato) {
+			$scope.adicionarContato = function (contato) {
 				$scope.contatos.push(angular.copy(contato));
 				delete $scope.contato;
 			};
-
-			$scope.removerContatos = function removerContatos(contatos) {
+			$scope.removerContatos = function (contatos) {
 				$scope.contatos = contatos.filter(function(contato) {
 					if(!contato.selecionado) {
 						return contato;
 					};
+				});
+			};
+			$scope.isContatoSelecionado = function (contatos) {
+				return contatos.some(function(contato) {
+					return contato.selecionado;
 				});
 			};
 		});
@@ -82,7 +85,7 @@
 			<option value="">Selecione uma operadora</option>
 		</select>
 		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar contato</button>
-		<button class="btn btn-danger btn-block" ng-click="removerContatos(contatos)">Remover contatos</button>
+		<button class="btn btn-danger btn-block" ng-click="removerContatos(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Remover contatos</button>
 	</div>
 </body>
 </html>
