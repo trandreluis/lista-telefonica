@@ -48,13 +48,19 @@
 				delete $scope.contato;
 			};
 
+			$scope.removerContatos = function removerContatos(contatos) {
+				$scope.contatos = contatos.filter(function(contato) {
+					if(!contato.selecionado) {
+						return contato;
+					};
+				});
+			};
 		});
 	</script>
 </head>
 <body ng-controller="listaTelefonicaController">
 	<div class="jumbotron">
 		<h3>{{app}}</h3>
-		{{contatos}}
 		<table class="table">
 			<tr>
 				<th></th>
@@ -76,6 +82,7 @@
 			<option value="">Selecione uma operadora</option>
 		</select>
 		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar contato</button>
+		<button class="btn btn-danger btn-block" ng-click="removerContatos(contatos)">Remover contatos</button>
 	</div>
 </body>
 </html>
