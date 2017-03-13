@@ -87,7 +87,8 @@
 			<option value="">Selecione uma operadora</option>
 		</select>
 		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar contato</button>
-		<button class="btn btn-danger btn-block" ng-click="removerContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Remover contatos</button>
+		<button class="btn btn-danger btn-block" ng-click="removerContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Remover contatos</button>
 	</div>
+	<div ng-include="'rodape.html'"></div>
 </body>
 </html>
