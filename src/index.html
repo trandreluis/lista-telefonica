@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="../lib/bootstrap/bootstrap.css">
 	<style>
 		.jumbotron{
-			width: 400px;
+			width: 600px;
 			text-align: center;
 			margin-top: 20px;
 			margin-left: auto;
@@ -38,9 +38,9 @@
 		angular.module("listaTelefonica").controller("listaTelefonicaController", function ($scope) {
 			$scope.app="Lista Telefonica";
 			$scope.contatos=[
-				{nome: "Andre", telefone: "(87) 9. 9167 - 8707", operadora: {nome: "Oi", codigo: 14, categoria: "Celular"}},
-				{nome: "Ana", telefone: "(81) 9. 9945 - 9012", operadora: {nome: "Tim", codigo: 41, categoria: "Celular"}},
-				{nome: "Diego", telefone: "(81) 9. 9145 - 5664", operadora: {nome: "Embratel", codigo: 43, categoria: "Fixo"}}
+				{nome: "Andre", telefone: "(87) 9. 9167 - 8707", data: new Date(), operadora: {nome: "Oi", codigo: 14, categoria: "Celular"}},
+				{nome: "Ana", telefone: "(81) 9. 9945 - 9012", data: new Date(), operadora: {nome: "Tim", codigo: 41, categoria: "Celular"}},
+				{nome: "Diego", telefone: "(81) 9. 9145 - 5664", data: new Date(), operadora: {nome: "Embratel", codigo: 43, categoria: "Fixo"}}
 			];
 			$scope.operadoras=[
 				{nome: "Oi", codigo: 14, categoria: "Celular"},
@@ -73,18 +73,21 @@
 <body ng-controller="listaTelefonicaController">
 	<div class="jumbotron">
 		<h3>{{app}}</h3>
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?"></input>
 		<table ng-show="contatos.length > 0" class="table table-striped">
 			<tr>
 				<th></th>
 				<th>Nome</th>
 				<th>Telefone</th>
 				<th>Operadora</th>
+				<th>Data</th>
 			</tr>
-			<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos">
+			<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter: criterioDeBusca">
 				<td><input type="checkbox" ng-model="contato.selecionado"/></td>
 				<td>{{contato.nome | uppercase}}</td>
 				<td>{{contato.telefone}}</td>
 				<td>{{contato.operadora.nome | lowercase}}</td>
+				<td>{{contato.data | date: 'dd/MM/yyyy'}}</td>
 			</tr>
 		</table>
 		<hr/>
