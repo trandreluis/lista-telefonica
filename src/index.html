@@ -32,23 +32,24 @@
 		}
 	</style>
 	<script src="../lib/angular/angular.js"></script>
+	<script src="../lib/angular/angular-locale_pt-br.js"></script>
 	<script src="../lib/angular/angular-messages.js"></script>
 	<script>
 		angular.module("listaTelefonica", ["ngMessages"]);
 		angular.module("listaTelefonica").controller("listaTelefonicaController", function ($scope) {
 			$scope.app="Lista Telefonica";
 			$scope.contatos=[
-				{nome: "Andre", telefone: "(87) 9. 9167 - 8707", data: new Date(), operadora: {nome: "Oi", codigo: 14, categoria: "Celular"}},
-				{nome: "Ana", telefone: "(81) 9. 9945 - 9012", data: new Date(), operadora: {nome: "Tim", codigo: 41, categoria: "Celular"}},
-				{nome: "Diego", telefone: "(81) 9. 9145 - 5664", data: new Date(), operadora: {nome: "Embratel", codigo: 43, categoria: "Fixo"}}
+				{nome: "Andre", telefone: "99167-8707", data: new Date(), operadora: {nome: "Oi", codigo: 14, categoria: "Celular"}},
+				{nome: "Ana", telefone: "99945-9012", data: new Date(), operadora: {nome: "Tim", codigo: 41, categoria: "Celular"}},
+				{nome: "Diego", telefone: "99145-5664", data: new Date(), operadora: {nome: "Embratel", codigo: 43, categoria: "Fixo"}}
 			];
 			$scope.operadoras=[
-				{nome: "Oi", codigo: 14, categoria: "Celular"},
-				{nome: "Tim", codigo: 41, categoria: "Celular"},
-				{nome: "Claro", contato: 21, categoria: "Celular"},
-				{nome: "Vivo", codigo:15, categoria: "Celular"},
-				{nome: "GVT", codigo: 20, categoria: "Fixo"},
-				{nome: "Embratel", codigo: 43, categoria: "Fixo"}
+				{nome: "Oi", codigo: 14, categoria: "Celular", precoMinuto: 1},
+				{nome: "Tim", codigo: 41, categoria: "Celular", precoMinuto: 2},
+				{nome: "Claro", contato: 21, categoria: "Celular", precoMinuto: 3},
+				{nome: "Vivo", codigo:15, categoria: "Celular", precoMinuto: 2},
+				{nome: "GVT", codigo: 20, categoria: "Fixo", precoMinuto: 3},
+				{nome: "Embratel", codigo: 43, categoria: "Fixo", precoMinuto: 1}
 			];
 			$scope.adicionarContato = function (contato) {
 				$scope.contatos.push(angular.copy(contato));
@@ -67,6 +68,10 @@
 					return contato.selecionado;
 				});
 			};
+			$scope.ordenarPor = function (campo) {
+				$scope.criterioDeOrdenacao = campo;
+				$scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
+			}
 		});
 	</script>
 </head>
@@ -77,12 +82,12 @@
 		<table ng-show="contatos.length > 0" class="table table-striped">
 			<tr>
 				<th></th>
-				<th>Nome</th>
-				<th>Telefone</th>
+				<th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+				<th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
 				<th>Operadora</th>
 				<th>Data</th>
 			</tr>
-			<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter: criterioDeBusca">
+			<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter: criterioDeBusca | orderBy: criterioDeOrdenacao:direcaoDaOrdenacao">
 				<td><input type="checkbox" ng-model="contato.selecionado"/></td>
 				<td>{{contato.nome | uppercase}}</td>
 				<td>{{contato.telefone}}</td>
@@ -94,7 +99,7 @@
 		<form name="contatoForm">
 		<input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10"/>
 		<input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/">
-		<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">
+		<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + '(' + (operadora.precoMinuto | currency) + ')'  group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
 			<option value="">Selecione uma operadora</option>
 		</select>
 		</form>
